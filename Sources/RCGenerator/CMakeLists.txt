@@ -22,3 +22,6 @@ target_compile_features(${PROJECT_NAME}
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
 )
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/rc/generate.cmake
+  DESTINATION lib/cmake/rc
+)
