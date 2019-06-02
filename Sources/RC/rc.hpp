@@ -14,6 +14,11 @@
 
 namespace khdkhd::rc {
 
+struct RCEntry {
+    const std::size_t size;
+    char *data;
+};
+
 struct Error : public std::exception {
     const std::string rc;
     const std::string cause;

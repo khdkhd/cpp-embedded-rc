@@ -4,16 +4,8 @@
 #include <map>
 
 namespace khdkhd::rc {
-namespace {
-
-struct RCEntry {
-    const std::size_t size;
-    char *data;
-};
 
 std::map<std::string, RCEntry> resourcesMap;
-
-} // namespace
 
 Error::Error(const std::string &rc, const std::string &cause)
     : rc{rc}
@@ -57,7 +49,7 @@ registerResource(
     char *data,
     std::size_t size) {
     if (resourcesMap.count(path) > 0) {
-        throw new Error(path, "Resource has already been registered!");
+        throw Error(path, "Resource has already been registered!");
     }
     resourcesMap.insert({path, RCEntry{size, data}});
 }

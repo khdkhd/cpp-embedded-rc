@@ -9,7 +9,7 @@ endif()
 add_library(${PROJECT_NAME} ${LIBRARY_TYPE} rc.cpp rc.hpp)
 
 target_compile_features(${PROJECT_NAME}
-  PRIVATE
+  PUBLIC
     cxx_std_17
 )
 target_link_libraries(${PROJECT_NAME}
@@ -30,3 +30,5 @@ install(TARGETS ${PROJECT_NAME}
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
 )
+
+add_subdirectory(tests)

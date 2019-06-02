@@ -3,5 +3,11 @@ boost_format/1.69.0@bincrafters/stable
 boost_program_options/1.69.0@bincrafters/stable
 boost_filesystem/1.69.0@bincrafters/stable
 
+[build_requires]
+gtest/1.8.1@bincrafters/stable
+
 [generators]
 cmake
+
+[options]
+gtest:build_gmock=False
