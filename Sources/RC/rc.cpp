@@ -62,6 +62,11 @@ registerResource(
     resourcesMap.insert({path, RCEntry{size, data}});
 }
 
+bool
+exists(const std::string &path) {
+    return resourcesMap.find(path) != resourcesMap.end();
+}
+
 std::vector<std::string>
 resources() {
     std::vector<std::string> res;

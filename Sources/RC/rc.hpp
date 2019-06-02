@@ -36,7 +36,7 @@ protected:
 };
 
 void registerResource(const std::string &path, char *data, std::size_t size);
+bool exists(const std::string &path);
 std::vector<std::string> resources();
-
 
 } // namespace khdkhd::rc
