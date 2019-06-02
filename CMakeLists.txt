@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 project(CPPEmbeddedRC)
 
+option(RC_SHARED "Enable/Disable dynamic library" OFF)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Scripts/CMake")
 
 include(Conan)
