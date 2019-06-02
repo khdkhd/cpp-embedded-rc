@@ -1,4 +1,6 @@
 #include <rc.hpp>
+
+#include <fstream>
 #include <iostream>
 
 RC_DECLARE(Assets1);
@@ -15,7 +17,7 @@ main(int argc, char **argv) {
 
     khdkhd::rc::rcstreambuf rcbuf;
 
-    rcbuf.open("/assets/bar");
+    rcbuf.open("/assets/txt/bar");
     if(rcbuf.is_open()) {
         std::istream input(&rcbuf);
         while (!input.eof()) {
@@ -25,6 +27,18 @@ main(int argc, char **argv) {
             }
         }
         std::cout << std::endl;
+    }
+
+    rcbuf.open("/assets/png/picture.png");
+    if(rcbuf.is_open()) {
+        std::istream input(&rcbuf);
+        std::fstream output("picture.png", std::ios_base::binary|std::ios_base::out|std::ios_base::trunc);
+        while (!input.eof()) {
+            const auto c = input.get();
+            if (c != khdkhd::rc::rcstreambuf::traits_type::eof()) {
+                output.put(static_cast<char>(c));
+            }
+        }
     }
 
     return 0;
