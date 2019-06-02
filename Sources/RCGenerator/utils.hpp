@@ -5,11 +5,16 @@
 
 namespace khdkhd::algo {
 
-template<typename InputIt, typename CallbackFunction>
-void for_each_indexed(InputIt first, InputIt last, CallbackFunction f) {
+template<typename InputIt, typename OutputIt, typename CallbackFunction>
+OutputIt
+indexed_transform(
+    InputIt first,
+    InputIt last,
+    OutputIt output,
+    CallbackFunction cb) {
     auto index = 0;
-    std::for_each(first, last, [&](const auto &elt) {
-        f(elt, index++, last - first);
+    return std::transform(first, last, output, [&](const auto &elt) {
+        return cb(elt, index++, last - first);
     });
 }
 

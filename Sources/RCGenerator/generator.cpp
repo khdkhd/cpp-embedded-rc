@@ -96,10 +96,10 @@ struct Hex {
 };
 
 io::Writer
-data(const std::string &resource, unsigned int segment_size = 8) {
+data(const fs::path &rc, unsigned int segment_size = 8) {
     using boost::format;
-    return [&resource, segment_size](std::ostream &output) -> std::ostream & {
-        auto input = std::ifstream(resource, std::ios_base::in|std::ios_base::binary);
+    return [&rc, segment_size](std::ostream &output) -> std::ostream & {
+        auto input = std::ifstream(rc.string(), std::ios_base::in|std::ios_base::binary);
         auto hex = Hex(segment_size);
         std::transform(
             std::istreambuf_iterator<char>(input),
@@ -113,8 +113,26 @@ data(const std::string &resource, unsigned int segment_size = 8) {
     };
 }
 
+io::Writer
+generateRCData(
+    const std::string &rc_name,
+    const std::string &rc_path,
+    const fs::path &rc
+) {
+    using boost::format;
+    return [&rc_name, &rc_path, &rc](std::ostream &output) -> std::ostream & {
+        return output
+            << comment(str((format("begin %s") % rc_path)))
+            << format("const unsigned char %1$s[] = {\n    ") % rc_name
+            << data(rc)
+            << "}; "
+            << comment(str((format("end %s") % rc_path)))
+            << std::endl;
+    };
+}
+
 std::string
-entry(const std::string &rc_path, unsigned int index) {
+generateRCRegister(const std::string &rc_path, unsigned int index, unsigned int) {
     using boost::format;
     const auto rc_name = rc_entry_name(index);
     return str(format("        registerResource(%1%, (char *)(%2%), sizeof(%2%));\n")
@@ -123,20 +141,21 @@ entry(const std::string &rc_path, unsigned int index) {
     );
 }
 
-std::string
-entries(const std::vector<std::string> &resources) {
+io::Writer
+generateRCInitialize(const std::string &name, const std::vector<std::string> &resources) {
     using boost::format;
-    std::stringstream ss;
-    khdkhd::algo::for_each_indexed(
-        std::begin(resources),
-        std::end(resources),
-        [&ss](const auto &rc_path, auto index, auto) {
-            ss << entry(rc_path, index);
-        }
-    );
-    return ss.str();
-}
+    return [&name, &resources](std::ostream &output) -> std::ostream & {
+        std::stringstream ss;
+        algo::indexed_transform(
+            std::begin(resources),
+            std::end(resources),
+            std::ostream_iterator<std::string>(ss),
+            &generateRCRegister
+        );
 
+        return output << boost::format(CPPInitializeTemplate) % name % ss.str();
+    };
+}
 } // namespace
 
 struct Generator::impl {
@@ -160,7 +179,7 @@ Generator::Generator(std::ostream &output, Config config)
 Generator::~Generator() {
     pimpl_->output
         << "} " << comment("namespace")
-        << boost::format(CPPInitializeTemplate) % pimpl_->config.name % entries(pimpl_->resources)
+        << generateRCInitialize(pimpl_->config.name, pimpl_->resources)
         << std::endl;
 }
 
@@ -176,13 +195,7 @@ Generator::push_back(const boost::filesystem::path &resource) {
     const auto rc_path = rc_entry_path(pimpl_->config.base, pimpl_->config.prefix, resource);
 
     pimpl_->resources.push_back(rc_path);
-    pimpl_->output
-        << comment(str((format("begin %s") % rc_path)))
-        << format("const unsigned char %1$s[] = {\n    ") % rc_name
-        << data(resource.string())
-        << "}; "
-        << comment(str((format("end %s") % rc_path)))
-        << std::endl;
+    pimpl_->output << generateRCData(rc_name, rc_path, resource);
 }
 
 } // namespace khdkhd::rc
