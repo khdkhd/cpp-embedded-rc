@@ -1,4 +1,4 @@
-project(RC)
+project(rc)
 
 if(RC_SHARED)
   set(LIBRARY_TYPE SHARED)

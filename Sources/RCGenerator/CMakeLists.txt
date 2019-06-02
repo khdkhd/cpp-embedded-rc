@@ -1,4 +1,4 @@
-project(RCGenerator)
+project(rc-generate)
 
 add_executable(${PROJECT_NAME}
   generator.cpp
