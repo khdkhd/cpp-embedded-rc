@@ -1,7 +1,13 @@
 include_guard()
 
-function(generate_binary_resources OUTPUT_VAR)
+function(rc_generate OUTPUT_VAR)
   cmake_parse_arguments(GEN_BIN_RC "" "BASE;NAME" "FILES" ${ARGN})
+
+  find_program(GEN_BIN_RC_GENERATOR rc-generate)
+
+  if(NOT GEN_BIN_RC_GENERATOR)
+    message(FATAL_ERROR "rc-generator executable not found!")
+  endif()
 
   if(NOT GEN_BIN_RC_BASE)
     set(GEN_BIN_RC_BASE "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -16,13 +22,12 @@ function(generate_binary_resources OUTPUT_VAR)
 
   add_custom_command(
     OUTPUT ${OUTPUT_FILES}
-    COMMAND $<TARGET_FILE:RCGenerator>
+    COMMAND "${GEN_BIN_RC_GENERATOR}"
       --base "${GEN_BIN_RC_BASE}"
       --name "${GEN_BIN_RC_NAME}"
       --output-dir "${OUTPUT_DIR}"
       ${GEN_BIN_RC_FILES}
     DEPENDS
-      RCGenerator
       ${GEN_BIN_RC_FILES}
   )
 
