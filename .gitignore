@@ -1,3 +1,4 @@
 compile_commands.json
 /**/*.delete
-/Build*
+/[Bb]uild*
+/Sources/RCPackageTest/[Bb]uild
