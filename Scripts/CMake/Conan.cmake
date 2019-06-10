@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 ## ### Variables
 
+option(SKIP_CONAN_INSTALL "Skip conan setup" OFF)
+
 ## ### Functions
 
 macro(conan_load_buildinfo)
@@ -29,16 +31,17 @@ macro(conan_load_buildinfo)
   endif()
 endmacro()
 
-## #### conan_install
+## #### conan_setup
 ## Cette ajoute le remote spécifié si ce dernier n'est pas déjà présent dans la
 ## liste des remotes.
 ##
 ## ##### Synopsis:
 ## ```cmake
-## conan_install(
+## conan_setup(
 ##   conanfile
 ##   [CMAKE_TARGETS]
 ##   [KEEP_RPATHS]
+##   [SKIP_INSTALL]
 ##   [SETTINGS <settings1=value1>...]
 ##   [OPTIONS <options1=value1>...]
 ## )
@@ -48,26 +51,27 @@ endmacro()
 ## - `CONANFILE <conanfile>`, path to the conanfile, default to ${CMAKE_SOURCE_DIR}/conanfile.txt
 ## - `CMAKE_TARGETS`, enable CMake targets,
 ## - `KEEP_RPATHS`, enable keep RPATH,
+## - `SKIP_INSTALL`, skip conan install,
 ## - `SETTINGS <settings1=value1>...`, add settings
 ## - `OPTIONS <options1=value1>...`, add options.
 ##
 ## ##### Usage:
 ## ```cmake
-## conan_install(
+## conan_setup(
 ##   CONANFILE ${CMAKE_SOURCE_DIR}/conanfile.txt
 ##   CMAKE_TARGETS
 ##   KEEP_RPATHS
 ## )
 ## ```
-macro(conan_install)
-  cmake_parse_arguments(CONAN_INSTALL "CMAKE_TARGETS;KEEP_RPATHS;" "CONANFILE;PROFILE" "SETTINGS;OPTIONS" ${ARGN})
+macro(conan_setup)
+  cmake_parse_arguments(CONAN_SETUP "SKIP_INSTALL;CMAKE_TARGETS;KEEP_RPATHS;" "CONANFILE;PROFILE" "SETTINGS;OPTIONS" ${ARGN})
 
   get_property(IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 
   find_program(CONAN conan)
 
-  if(NOT CONAN_INSTALL_CONANFILE)
-    set(CONAN_INSTALL_CONANFILE ${CMAKE_SOURCE_DIR}/conanfile.txt)
+  if(NOT CONAN_SETUP_CONANFILE)
+    set(CONAN_SETUP_CONANFILE ${CMAKE_SOURCE_DIR}/conanfile.txt)
   endif()
 
   if(IS_MULTI_CONFIG)
@@ -81,43 +85,47 @@ macro(conan_install)
 
   if(WIN32)
     if(CMAKE_GENERATOR_PLATFORM STREQUAL x64)
-      list(APPEND CONAN_INSTALL_SETTINGS arch=x86_64)
+      list(APPEND CONAN_SETUP_SETTINGS arch=x86_64)
     else()
-      list(APPEND CONAN_INSTALL_SETTINGS arch=x86)
+      list(APPEND CONAN_SETUP_SETTINGS arch=x86)
     endif()
   endif()
 
-  foreach(SETTING ${CONAN_INSTALL_SETTINGS})
+  foreach(SETTING ${CONAN_SETUP_SETTINGS})
     list(APPEND CONAN_ARGS -s ${SETTING})
   endforeach()
 
-  foreach(OPTION ${CONAN_INSTALL_OPTIONS})
+  foreach(OPTION ${CONAN_SETUP_OPTIONS})
     list(APPEND CONAN_ARGS -o ${OPTION})
   endforeach()
 
-  if(CONAN_INSTALL_PROFILE)
-    list(APPEND CONAN_ARGS "-pr=${CONAN_INSTALL_PROFILE}")
+  if(CONAN_SETUP_PROFILE)
+    list(APPEND CONAN_ARGS "-pr=${CONAN_SETUP_PROFILE}")
   endif()
 
-  foreach(BUILD_TYPE ${CONAN_BUILD_TYPES})
-    execute_process(
-      COMMAND ${CONAN} install
-        ${CONAN_ARGS}
-        -s build_type=${BUILD_TYPE}
-        --build=missing
-        "${CONAN_INSTALL_CONANFILE}"
-      RESULT_VARIABLE CONAN_RESULT
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-    )
-  endforeach()
+  if(NOT (CONAN_SETUP_SKIP_INSTALL OR SKIP_CONAN_INSTALL))
+    foreach(BUILD_TYPE ${CONAN_BUILD_TYPES})
+      execute_process(
+        COMMAND ${CONAN} install
+          ${CONAN_ARGS}
+          -s build_type=${BUILD_TYPE}
+          --build=missing
+          "${CONAN_SETUP_CONANFILE}"
+        RESULT_VARIABLE CONAN_RESULT
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+      )
+    endforeach()
+  else()
+    message(STATUS "Conan: Skip install")
+  endif()
 
   conan_load_buildinfo()
 
-  if(CONAN_INSTALL_CMAKE_TARGETS)
+  if(CONAN_SETUP_CMAKE_TARGETS)
     list(APPEND CONAN_BASIC_SETUP_OPTIONS TARGETS)
   endif()
 
-  if(CONAN_INSTALL_KEEP_RPATHS)
+  if(CONAN_SETUP_KEEP_RPATHS)
     list(APPEND CONAN_BASIC_SETUP_OPTIONS KEEP_RPATHS)
   endif()
 

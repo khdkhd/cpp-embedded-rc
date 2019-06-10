@@ -11,7 +11,7 @@ include(Tests)
 
 conan_check(VERSION 1.14)
 conan_add_remote(NAME bincrafters URL https://api.bintray.com/conan/bincrafters/public-conan)
-conan_install(
+conan_setup(
   CMAKE_TARGETS
   KEEP_RPATHS
 )
