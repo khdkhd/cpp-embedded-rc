@@ -22,7 +22,6 @@ class JuceConan(ConanFile):
         "boost_filesystem/1.69.0@bincrafters/stable"
     )
 
-
     def configure(self):
         self.options["gtest"].build_gmock = False
 
