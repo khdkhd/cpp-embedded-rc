@@ -23,7 +23,7 @@ matrix:
             - cmake-data
             - cmake
       env:
-        - MATRIX_EVAL="CONAN_CLANG_VERSIONS=6.0"
+        - CONAN_CLANG_VERSIONS=6.0
 
     - os: linux
       addons:
@@ -36,7 +36,7 @@ matrix:
             - cmake-data
             - cmake
       env:
-        - MATRIX_EVAL="CONAN_GCC_VERSIONS=7"
+        - CONAN_GCC_VERSIONS=7
 
 before_install:
   - eval "${MATRIX_EVAL}"
