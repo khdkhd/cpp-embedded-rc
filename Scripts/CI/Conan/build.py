@@ -1,4 +1,4 @@
-rom conan.packager import ConanMultiPackager
+from conan.packager import ConanMultiPackager
 
 def build():
     builder = ConanMultiPackager(build_policy="missing")
