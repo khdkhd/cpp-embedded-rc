@@ -1,0 +1,38 @@
+env:
+   global:
+        - CONAN_USERNAME: "khdkhd" # ADJUST WITH YOUR REFERENCE USERNAME!
+        - CONAN_LOGIN_USERNAME: "nealrame" # ADJUST WITH YOUR LOGIN USERNAME!
+        - CONAN_CHANNEL: "testing" # ADJUST WITH YOUR CHANNEL!
+        - CONAN_UPLOAD: "https://api.bintray.com/conan/khdkhd/public-conan"
+        - CONAN_STABLE_BRANCH_PATTERN: "release/*"
+        - CONAN_UPLOAD_ONLY_WHEN_STABLE: 1 # Will only upload when the branch matches "release/*"
+
+linux: &linux
+    os: linux
+    sudo: required
+    language: python
+    python: "3.6"
+    services:
+        - docker
+
+# osx: &osx
+#     os: osx
+#     language: generic
+
+matrix:
+   include:
+
+        - <<: *linux
+            env: CONAN_CLANG_VERSIONS=8.0 CONAN_DOCKER_IMAGE=conanio/clang8
+
+        # - <<: *osx
+        #     osx_image: xcode10
+        #     env: CONAN_APPLE_CLANG_VERSIONS=10.0
+
+install:
+    - chmod +x ./Scripts/CI/Travis/install.sh
+    - ./Scripts/CI/Travis/install.sh
+
+script:
+    - chmod +x ./Scripts/CI/Travis/run.sh
+    - ./Scripts/CI/Travis/run.sh
