@@ -2,9 +2,9 @@ language: python
 python: "3.7"
 env:
   global:
-    - CONAN_USERNAME="khdkhd" # ADJUST WITH YOUR REFERENCE USERNAME!
-    - CONAN_LOGIN_USERNAME="nealrame" # ADJUST WITH YOUR LOGIN USERNAME!
-    - CONAN_CHANNEL="testing" # ADJUST WITH YOUR CHANNEL!
+    - CONAN_USERNAME="khdkhd"
+    - CONAN_LOGIN_USERNAME="nealrame"
+    - CONAN_CHANNEL="testing"
     - CONAN_UPLOAD="https://api.bintray.com/conan/khdkhd/public-conan"
     - CONAN_STABLE_BRANCH_PATTERN="release/*"
     - CONAN_UPLOAD_ONLY_WHEN_STABLE=1 # Will only upload when the branch matches "release/*"
