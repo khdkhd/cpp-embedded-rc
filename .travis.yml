@@ -26,6 +26,8 @@ matrix:
             - cmake
       env:
         - CONAN_CLANG_VERSIONS=6.0
+        - CC=clang
+        - CXX=clang++
 
     - os: linux
       addons:
@@ -39,9 +41,8 @@ matrix:
             - cmake
       env:
         - CONAN_GCC_VERSIONS=7
-
-before_install:
-  - eval "${MATRIX_EVAL}"
+        - CC=gcc-7
+        - CXX=g++-7
 
 install:
   - pip install conan --upgrade
