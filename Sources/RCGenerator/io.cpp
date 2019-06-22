@@ -1,6 +1,6 @@
-#include "utils.hpp"
+#include "io.hpp"
 
 std::ostream &
-operator<<(std::ostream &os, const std::function<std::ostream &(std::ostream &)> &s) {
+operator<<(std::ostream &os, const khdkhd::io::Writer &s) {
     return s(os);
 }
