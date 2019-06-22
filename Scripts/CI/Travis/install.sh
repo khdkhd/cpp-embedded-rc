@@ -6,7 +6,7 @@ set -x
 # if [[ "$(uname -s)" == 'Darwin' ]]; then
 #     MACOS_HEADER_PKG="/Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg"
 #
-#     if [ -f "$MACOS_HEADER_PKG" ];
+#     if [ -f "$MACOS_HEADER_PKG" ]; then
 #         sudo installer -pkg "$MACOS_HEADER_PKG" -target /
 #     fi
 #
