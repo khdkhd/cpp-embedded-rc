@@ -92,10 +92,10 @@ main(int argc, char const **argv) {
     std::fstream cpp_output(cpp.string(), std::ios_base::out|std::ios_base::trunc);
     if (cpp_output) {
         khdkhd::rc::Generator generator(cpp_output, khdkhd::rc::Generator::Config{
-            .base = base,
-            .name = name,
-            .prefix = prefix,
-            .verbose = vm["verbose"].as<bool>(),
+            /* .name    = */ name,
+            /* .base    = */ base,
+            /* .prefix  = */ prefix,
+            /* .verbose = */ vm["verbose"].as<bool>(),
         });
 
         std::copy(
