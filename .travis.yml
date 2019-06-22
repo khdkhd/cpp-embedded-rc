@@ -26,8 +26,8 @@ matrix:
             - cmake
       env:
         - CONAN_CLANG_VERSIONS=6.0
-        - CC=clang
-        - CXX=clang++
+        - CC=clang-6.0
+        - CXX=clang++-6.0
 
     - os: linux
       addons:
