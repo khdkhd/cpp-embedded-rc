@@ -3,11 +3,13 @@
 set -e
 set -x
 
-# if [[ "$(uname -s)" == 'Darwin' ]]; then
-#     if which pyenv > /dev/null; then
-#         eval "$(pyenv init -)"
-#     fi
-#     pyenv activate conan
-# fi
+if [ "$TRAVIS_OS_NAME" = "osx" ];
+then
+    if which pyenv > /dev/null;
+    then
+        eval "$(pyenv init -)"
+    fi
+    pyenv activate conan
+fi
 
 python ./Scripts/CI/Conan/build.py

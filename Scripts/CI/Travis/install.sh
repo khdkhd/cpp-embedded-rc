@@ -12,7 +12,8 @@ then
     brew install pyenv-virtualenv
     brew install cmake || true
 
-    if which pyenv > /dev/null; then
+    if which pyenv > /dev/null;
+    then
         eval "$(pyenv init -)"
     fi
 
