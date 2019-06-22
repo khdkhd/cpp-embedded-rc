@@ -18,22 +18,6 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-6.0
-            - george-edison55-precise-backports
-          packages:
-            - clang-6.0
-            - cmake-data
-            - cmake
-      env:
-        - CONAN_CLANG_VERSIONS=6.0
-        - CC=clang-6.0
-        - CXX=clang++-6.0
-
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
             - george-edison55-precise-backports
           packages:
             - g++-7
@@ -44,9 +28,14 @@ matrix:
         - CC=gcc-7
         - CXX=g++-7
 
+    - os: osx
+      osx_image: xcode10.2
+      env:
+        - CONAN_APPLE_CLANG_VERSIONS=10.0
+
 install:
-  - pip install conan --upgrade
-  - pip install conan_package_tools
+  - chmod +x ./Scripts/CI/Travis/install.sh
+  - ./Scripts/CI/Travis/install.sh
 
 script:
   - chmod +x ./Scripts/CI/Travis/run.sh
