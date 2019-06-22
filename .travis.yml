@@ -30,6 +30,7 @@ matrix:
 
     - os: osx
       osx_image: xcode10.2
+      language: shell
       env:
         - CONAN_APPLE_CLANG_VERSIONS=10.0
 
