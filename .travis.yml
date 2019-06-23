@@ -1,5 +1,4 @@
-language: python
-python: "3.7"
+language: minimal
 env:
   global:
     - CONAN_USERNAME="khdkhd"
@@ -18,21 +17,21 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - george-edison55-precise-backports
           packages:
             - g++-7
-            - cmake-data
-            - cmake
+      dist: xenial
       env:
         - CONAN_GCC_VERSIONS=7
         - CC=gcc-7
         - CXX=g++-7
+      language: python
+      python: "3.7"
 
     - os: osx
       osx_image: xcode10.2
-      language: shell
       env:
         - CONAN_APPLE_CLANG_VERSIONS=10.0
+      language: shell
 
 install:
   - chmod +x ./Scripts/CI/Travis/install.sh
