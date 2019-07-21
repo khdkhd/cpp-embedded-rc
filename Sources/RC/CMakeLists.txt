@@ -6,7 +6,12 @@ else()
   set(LIBRARY_TYPE STATIC)
 endif()
 
-add_library(${PROJECT_NAME} ${LIBRARY_TYPE} rc.cpp rc.hpp)
+add_library(${PROJECT_NAME} ${LIBRARY_TYPE}
+  rc.cpp
+  rc.hpp
+  rcstreambuf.cpp
+  rcistream.cpp
+)
 
 target_compile_features(${PROJECT_NAME}
   PUBLIC

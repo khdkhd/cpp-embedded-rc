@@ -4,7 +4,7 @@ from conans import ConanFile, CMake, tools
 
 class JuceConan(ConanFile):
     name = "cpp-embedded-rc"
-    version = "0.0.1"
+    version = "1.0.0"
     license = "ISC"
     author = "Julien Graziano (julien@graziano.fr)"
     url = "https://github.com/khdkhd/cpp-embedded-rc"

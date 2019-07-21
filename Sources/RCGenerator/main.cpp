@@ -18,10 +18,10 @@ main(int argc, char const **argv) {
     po::options_description options("Available options");
     options.add_options()
         ("help,h", po::bool_switch(), "Display help message and exit.")
-        ("verbose,h", po::bool_switch(), "Enable verbose mode.")
+        ("verbose,v", po::bool_switch(), "Enable verbose mode.")
         ("base,b", po::value<fs::path>()->default_value(fs::current_path()), "Set base directory value.")
         ("prefix,p", po::value<fs::path>()->default_value("/"), "Set base directory value.")
-        ("name", po::value<std::string>()->default_value("binary_data"), "Set the resource name")
+        ("name,n", po::value<std::string>()->default_value("binary_data"), "Set the resource name")
         ("output-dir,d", po::value<fs::path>()->default_value(fs::current_path()), "Set output directory.");
 
     po::options_description hidden;

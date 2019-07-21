@@ -16,35 +16,8 @@ const char *Error::what() const noexcept {
     return str(boost::format("Error: '%s' Cause: %s") % rc % cause).c_str();
 }
 
-
-rcstreambuf::rcstreambuf() {
-}
-
-rcstreambuf *
-rcstreambuf::open(const std::string &path) {
-    const auto entry = resourcesMap.find(path);
-    open_ = false;
-    if (entry != resourcesMap.end()) {
-        const auto rc = entry->second;
-        setg(rc.data, rc.data, rc.data + rc.size);
-        open_ = true;
-        return this;
-    }
-    return nullptr;
-}
-
-bool
-rcstreambuf::is_open() const {
-    return open_;
-}
-
-rcstreambuf::int_type
-rcstreambuf::underflow() {
-    return traits_type::eof();
-}
-
 void
-registerResource(
+register_resource(
     const std::string &path,
     char *data,
     std::size_t size) {
@@ -59,8 +32,15 @@ exists(const std::string &path) {
     return resourcesMap.find(path) != resourcesMap.end();
 }
 
+streambuf
+open(const std::string &path) {
+    streambuf rcbuf;
+    rcbuf.open(path);
+    return rcbuf;
+}
+
 std::vector<std::string>
-resources() {
+list() {
     std::vector<std::string> res;
     std::transform(
         std::begin(resourcesMap),

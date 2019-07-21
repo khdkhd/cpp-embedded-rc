@@ -26,7 +26,7 @@ const std::string CPPHeaderTemplate = R"__(// 🤖 -=> Generated Code <=- 🤖
 
 const std::string CPPInitializeTemplate = R"__(
 void rc_initiliaze_%1%() {
-    using khdkhd::rc::registerResource;
+    using khdkhd::rc::register_resource;
     static std::once_flag inialized;
     std::call_once(inialized, []{
 %2%    });
@@ -135,7 +135,7 @@ std::string
 generateRCRegister(const std::string &rc_path, unsigned int index, unsigned int) {
     using boost::format;
     const auto rc_name = rc_entry_name(index);
-    return str(format("        registerResource(%1%, (char *)(%2%), sizeof(%2%));\n")
+    return str(format("        register_resource(%1%, (char *)(%2%), sizeof(%2%));\n")
         % std::quoted(rc_path)
         % rc_name
     );

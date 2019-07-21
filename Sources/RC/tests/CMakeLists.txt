@@ -1,6 +1,14 @@
 project(rc-tests)
 
-add_executable(${PROJECT_NAME} main.cpp)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+
+include(RegisterResource/test)
+include(Exists/test)
+include(List/test)
+include(Streambuf/test)
+include(IStream/test)
+
+add_executable(${PROJECT_NAME} main.cpp ${TESTS})
 target_link_libraries(${PROJECT_NAME}
   PUBLIC
     rc
