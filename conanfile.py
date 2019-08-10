@@ -2,7 +2,7 @@ import os
 from conans import ConanFile, CMake, tools
 
 
-class JuceConan(ConanFile):
+class CPPEmbeddedRCConan(ConanFile):
     name = "cpp-embedded-rc"
     version = "1.0.0"
     license = "ISC"
